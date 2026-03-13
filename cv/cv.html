@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emmanuel Asuva | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        header, main, footer { padding-left: 300px; }
+        @media only screen and (max-width : 992px) {
+            header, main, footer { padding-left: 0; }
+        }
+        .profile-img { width: 150px; height: 150px; border-radius: 50%; margin: 20px auto; display: block; }
+        .skill-tag { margin: 5px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <ul id="slide-out" class="sidenav sidenav-fixed blue-grey darken-4">
+        <li><div class="user-view">
+            <div class="background blue darken-3"></div>
+            <img class="profile-img circle" src="static/profile.jpg">
+            <span class="white-text name">Emmanuel Asuva</span>
+            <span class="white-text email">aligulaemmanuel@gmail.com</span>
+        </div></li>
+        <li><a class="white-text" href="#about"><i class="material-icons white-text">person</i>About</a></li>
+        <li><a class="white-text" href="#skills"><i class="material-icons white-text">code</i>Skills</a></li>
+        <li><a class="white-text" href="#experience"><i class="material-icons white-text">work</i>Experience</a></li>
+        <li><a class="white-text" href="#projects"><i class="material-icons white-text">folder</i>Projects</a></li>
+    </ul>
+
+    <main>
+        <div id="about" class="section scrollspy blue darken-2 white-text center" style="padding: 100px 0;">
+            <div class="container">
+                <h1>Software Developer & Multimedia Specialist</h1>
+                <p class="flow-text">AWS Certified Cloud Practitioner | Sound Engineer | Videographer</p>
+            </div>
+        </div>
+
+        <div id="skills" class="section scrollspy container">
+            <h3 class="header">Technical Proficiency</h3>
+            <div class="row">
+                <div class="col s12 m6">
+                    <h5>Development</h5>
+                    <div class="chip blue white-text">Python / Flask</div>
+                    <div class="chip blue white-text">HTML5 / CSS3</div>
+                    <div class="chip blue white-text">SQLite</div>
+                    <div class="chip blue white-text">AWS Cloud</div>
+                </div>
+                <div class="col s12 m6">
+                    <h5>Creative Suite</h5>
+                    <div class="chip orange white-text">Premiere Pro</div>
+                    <div class="chip orange white-text">After Effects</div>
+                    <div class="chip orange white-text">Audition</div>
+                    <div class="chip orange white-text">Lightroom</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="projects" class="section scrollspy grey lighten-4">
+            <div class="container">
+                <h3>Key Projects</h3>
+                <div class="row">
+                    <div class="col s12 m4">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Bakery Web App</span>
+                                <p>A full-stack project built with Flask and Jinja2 templates.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m4">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Tribute Site</span>
+                                <p>Responsive gallery-focused site for PLO Lumumba.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m4">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Multimedia Portfolio</span>
+                                <p>Showcasing photography and sound engineering work.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="manu (2).jpg"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            M.Sidenav.init(document.querySelectorAll('.sidenav'));
+            M.ScrollSpy.init(document.querySelectorAll('.scrollspy'));
+        });
+    </script>
+</body>
+</html>
