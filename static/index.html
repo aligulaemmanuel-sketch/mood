@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en-KE">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#070b16">
+    <title>Beacon Kenya — Live location and nearby care</title>
+    <script>
+      try {
+        const theme = localStorage.getItem("beacon-kenya-theme");
+        const textSize = localStorage.getItem("beacon-kenya-text-size");
+        document.documentElement.dataset.theme = theme === "light" ? "light" : "dark";
+        if (textSize === "large") document.documentElement.dataset.textSize = "large";
+      } catch {
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://tile.openstreetmap.org">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Beacon home">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <span>beacon<span class="brand-period">.</span></span>
+      </a>
+      <div class="topbar-right">
+        <span class="environment-pill"><span class="pulse-dot"></span><span id="environmentLabel">KENYA · LIVE MAP</span></span>
+        <button class="icon-button text-size-button" id="textSizeToggle" type="button" aria-label="Use larger text" title="Use larger text" aria-pressed="false">A+</button>
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Switch to light mode" title="Switch to light mode" aria-pressed="false">☀</button>
+        <button class="icon-button" id="refreshButton" type="button" aria-label="Refresh responder queue" title="Refresh queue">↻</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="left-column">
+        <div class="eyebrow"><span class="eyebrow-line"></span> KENYA · LIVE LOCATION &amp; FACILITY SEARCH</div>
+        <h1>Help starts<br>with <span class="heading-accent">being found.</span></h1>
+        <p class="intro">Use your current GPS location to find nearby health-facility listings. App alerts remain simulations; in an emergency, call a service directly.</p>
+
+        <section class="sos-card" aria-labelledby="sosTitle">
+          <div class="card-topline">
+            <div>
+              <p class="section-kicker">INCIDENT TRIGGER</p>
+              <h2 id="sosTitle">Need help?</h2>
+            </div>
+            <span class="shield-icon" aria-hidden="true">✳</span>
+          </div>
+          <p class="card-copy">This button creates a local test record only. It does not alert a responder. For real help, tap a Kenya emergency number below.</p>
+
+          <div class="location-status" id="locationStatus">
+            <span class="location-indicator" aria-hidden="true"></span>
+            <span id="locationText">Location not set</span>
+            <span class="accuracy" id="accuracyText"></span>
+          </div>
+          <div class="location-actions">
+            <button class="button button-secondary button-small" id="locateButton" type="button">◎ <span>Use current location</span></button>
+          </div>
+
+          <label class="patient-sharing-consent">
+            <input id="sharePatientDetails" type="checkbox">
+            <span>
+              <strong>Share saved medical ID with an assigned medic for this test alert only</strong>
+              <small>Only share details you choose. This local prototype stores shared details unencrypted until the incident is resolved or cancelled. Use synthetic data only.</small>
+            </span>
+          </label>
+
+          <div class="countdown-panel" id="countdownPanel" hidden aria-live="assertive">
+            <div class="countdown-ring"><span id="countdownValue">10</span></div>
+            <div>
+              <strong>Test alert will be created</strong>
+              <p>Simulation only. Cancel if this was accidental.</p>
+            </div>
+            <button class="button button-cancel" id="cancelCountdownButton" type="button">Cancel</button>
+          </div>
+          <div class="alert-buttons">
+            <button class="button button-sos" id="sosButton" type="button">
+              <span class="sos-icon" aria-hidden="true">!</span>
+              <span><strong>Send test SOS</strong><small>SIMULATED · NO REAL ALERT</small></span>
+              <span class="button-arrow" aria-hidden="true">↗</span>
+            </button>
+            <button class="button button-crash" id="crashButton" type="button">
+              <span class="crash-icon" aria-hidden="true">⌁</span>
+              <span><strong>Simulate crash alert</strong><small>MANUAL TEST · NOT SENSOR DETECTION</small></span>
+              <span class="button-arrow" aria-hidden="true">↗</span>
+            </button>
+          </div>
+          <p class="inline-message" id="triggerMessage" role="status"></p>
+        </section>
+
+        <section class="kenya-emergency" aria-label="Kenya emergency numbers">
+          <div class="kenya-emergency-copy">
+            <span class="kenya-emergency-icon" aria-hidden="true">!</span>
+            <div>
+              <strong>Emergency contacts in Kenya</strong>
+              <span>Tap a number to open your phone dialer. This app does not place calls or dispatch help.</span>
+            </div>
+          </div>
+          <div class="kenya-contact-list">
+            <div class="kenya-contact-group">
+              <strong>National emergency · Police, ambulance, fire</strong>
+              <div class="kenya-emergency-actions">
+                <a href="tel:999" aria-label="Call Kenya national emergency number 999">999</a>
+                <a href="tel:112" aria-label="Call Kenya national emergency number 112">112</a>
+              </div>
+            </div>
+            <div class="kenya-contact-group">
+              <strong>Nairobi Fire Brigade · user-provided, verify</strong>
+              <div class="kenya-emergency-actions">
+                <a href="tel:+254202222181" aria-label="Open dialer for user-provided Nairobi Fire Brigade number 020 222 2181">020 222 2181</a>
+                <a href="tel:+254202344599" aria-label="Open dialer for user-provided Nairobi Fire Brigade number 020 234 4599">020 234 4599</a>
+              </div>
+            </div>
+            <div class="kenya-contact-group">
+              <strong>Kenya Red Cross · E-Plus Ambulance</strong>
+              <div class="kenya-emergency-actions">
+                <a href="tel:1514" aria-label="Call Kenya Red Cross E-Plus at 1514">1514</a>
+                <a href="tel:+254700395395" aria-label="Call Kenya Red Cross E-Plus at 0700 395 395">0700 395 395</a>
+                <a href="tel:+254738395395" aria-label="Call Kenya Red Cross E-Plus at 0738 395 395">0738 395 395</a>
+              </div>
+              <span class="kenya-contact-extra"><a href="tel:1199">1199 · Red Cross response / disaster line</a></span>
+            </div>
+            <div class="kenya-contact-group">
+              <strong>St John Ambulance Kenya</strong>
+              <div class="kenya-emergency-actions">
+                <a href="tel:+254721225285" aria-label="Call St John Ambulance at 0721 225 285">0721 225 285</a>
+                <a href="tel:+254721611555" aria-label="Call St John Ambulance dispatch at 0721 611 555">0721 611 555</a>
+              </div>
+            </div>
+            <div class="kenya-contact-group">
+              <strong>AMREF Flying Doctors · user-provided, verify</strong>
+              <div class="kenya-emergency-actions">
+                <a href="tel:+254733639088" aria-label="Open dialer for user-provided AMREF Flying Doctors number 0733 639 088">0733 639 088</a>
+              </div>
+            </div>
+          </div>
+          <p class="kenya-emergency-swahili">Dharura Kenya? Piga huduma za dharura au ambulensi moja kwa moja. Nambari hizi zimeonyeshwa kama zilivyotolewa; thibitisha upatikanaji na mtoa huduma.</p>
+        </section>
+
+        <details class="medical-id-card" id="medicalIdCard">
+          <summary>
+            <span class="medical-id-mark" aria-hidden="true">ID</span>
+            <span class="medical-id-heading"><strong>Emergency medical ID</strong><small>Optional · saved only in this browser</small></span>
+            <span class="aid-expand" aria-hidden="true">+</span>
+          </summary>
+          <div class="medical-id-content">
+            <p class="medical-id-notice">Only add details you choose to store. This app keeps them in this browser’s local storage; they are not sent with SOS simulations or shared with responders. Do not enter real information on a shared device.</p>
+            <form id="medicalIdForm" autocomplete="off">
+              <div class="medical-id-fields">
+                <label>Name <input name="name" maxlength="80" autocomplete="name"></label>
+                <label>Blood group <input name="bloodGroup" maxlength="24" placeholder="Optional"></label>
+                <label class="medical-id-wide">Allergies <textarea name="allergies" rows="2" maxlength="500" placeholder="Medicines, foods, or other allergies"></textarea></label>
+                <label class="medical-id-wide">Medical conditions <textarea name="conditions" rows="2" maxlength="500"></textarea></label>
+                <label class="medical-id-wide">Medicines <textarea name="medicines" rows="2" maxlength="500"></textarea></label>
+                <label>SHA / insurance reference <input name="insurance" maxlength="80"></label>
+                <label>Emergency contact name <input name="contactName" maxlength="80"></label>
+                <label class="medical-id-wide">Emergency contact phone <input name="contactPhone" type="tel" maxlength="24" autocomplete="tel"></label>
+              </div>
+              <div class="medical-id-actions">
+                <button type="submit" class="button button-secondary">Save on this device</button>
+                <button type="button" class="text-button" id="clearMedicalIdButton">Clear saved details</button>
+              </div>
+              <p class="medical-id-status" id="medicalIdStatus" role="status"></p>
+            </form>
+          </div>
+        </details>
+
+        <section class="first-aid-card" aria-labelledby="firstAidTitle">
+          <div class="first-aid-heading">
+            <div>
+              <p class="section-kicker">WHILE HELP IS ON THE WAY · MSAADA UKO NJIANI</p>
+              <h2 id="firstAidTitle">First aid basics · Huduma ya kwanza</h2>
+            </div>
+            <span class="first-aid-cross" aria-hidden="true">+</span>
+          </div>
+          <img
+            class="first-aid-image"
+            src="/static/first-aid-scene.svg"
+            alt="Illustration of a helper staying beside an injured person while calling for help."
+            width="640"
+            height="220"
+          >
+          <h3 class="aid-subheading">First check: DRABC · Kagua kwanza</h3>
+          <ol class="drabc-list">
+            <li><span class="drabc-letter">D</span><div><strong>Danger · Hatari</strong><p>Check traffic, fire, electricity and other hazards. Approach only if safe.</p></div></li>
+            <li><span class="drabc-letter">R</span><div><strong>Response · Mwitikio</strong><p>Speak loudly and gently tap their shoulders. Do not shake someone with a possible injury.</p></div></li>
+            <li><span class="drabc-letter">A</span><div><strong>Airway · Njia ya hewa</strong><p>Look for an open airway. Open it only if you know how or the emergency dispatcher instructs you.</p></div></li>
+            <li><span class="drabc-letter">B</span><div><strong>Breathing · Kupumua</strong><p>Check for normal breathing for no more than 10 seconds. Gasping is not normal breathing.</p></div></li>
+            <li><span class="drabc-letter">C</span><div><strong>Circulation / severe bleeding · Damu nyingi</strong><p>Look for dangerous bleeding and press firmly on it. Do not try to check a pulse.</p></div></li>
+          </ol>
+          <p class="aid-emergency-reminder">If someone is unresponsive, not breathing normally, has life-threatening bleeding, or is in immediate danger: call 999 or 112 now, put the phone on speaker, and follow the dispatcher.</p>
+
+          <h3 class="aid-subheading">Illustrated first-aid guides · Miongozo ya huduma ya kwanza</h3>
+          <p class="aid-guide-intro">Tap a picture to open its steps. These are brief educational reminders—not a substitute for emergency dispatch or practical first-aid training.</p>
+          <div class="aid-filter-list" id="aidFilterList" role="group" aria-label="Filter first-aid guides">
+            <button class="aid-filter is-active" type="button" data-filter="all" aria-pressed="true">All guides</button>
+            <button class="aid-filter" type="button" data-filter="trauma" aria-pressed="false">Trauma</button>
+            <button class="aid-filter" type="button" data-filter="breathing" aria-pressed="false">Breathing</button>
+            <button class="aid-filter" type="button" data-filter="medical" aria-pressed="false">Medical</button>
+            <button class="aid-filter" type="button" data-filter="fire" aria-pressed="false">Fire &amp; safety</button>
+          </div>
+          <div class="aid-guide-grid">
+            <details class="aid-guide" data-category="breathing">
+              <summary><img src="/static/aid-cpr.svg" alt="" width="160" height="88"><span><strong>Unresponsive / CPR</strong><small>Asiyeitikia / CPR</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol><li>Call 999/112; ask someone to get an AED. Put the phone on speaker.</li><li>If unresponsive and not breathing normally (or only gasping), start chest compressions in the centre of the chest.</li><li>For an adult, push hard and fast: 100–120 compressions/minute, about 5–6 cm deep; let the chest rise between pushes.</li><li>If trained and willing, use 30 compressions to 2 breaths. Otherwise do continuous compressions. Use an AED as soon as available and follow its prompts.</li></ol>
+                <p class="swahili-copy">Piga 999/112 na uombe AED. Ikiwa mtu haitikii na hapumui kawaida, anza kubonyeza katikati ya kifua kwa nguvu na haraka. Kwa mtu mzima: mara 100–120 kwa dakika, kina cha takriban sentimita 5–6. Fuata maelekezo ya mhudumu. Mwongozo wa watoto wachanga ni tofauti.</p>
+                <p class="aid-caution">If they are breathing normally, do not do CPR; monitor breathing and follow the dispatcher. CPR guidance for infants and children differs—follow dispatcher instructions and your training.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="trauma">
+              <summary><img src="/static/aid-bleeding.svg" alt="" width="160" height="88"><span><strong>Severe bleeding</strong><small>Damu nyingi</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol><li>Call 999/112 for heavy, spurting or uncontrolled bleeding. Use gloves or a barrier if available.</li><li>Press firmly and continuously on the wound with clean gauze or cloth.</li><li>If blood comes through, keep the first dressing in place and add more on top. Do not keep lifting it to check.</li><li>Use a commercial tourniquet only for life-threatening limb bleeding if trained; follow its instructions and tell responders when it was applied.</li></ol>
+                <p class="swahili-copy">Piga 999/112 ikiwa damu ni nyingi au haikomi. Bonyeza jeraha kwa nguvu bila kuachia kwa kitambaa safi. Damu ikipenya, ongeza vitambaa juu ya cha kwanza; usikiondoe. Tumia tourniquet ya dukani tu ikiwa umefunzwa.</p>
+                <p class="aid-caution">Do not remove embedded objects or apply a tourniquet made from a belt or rope.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="breathing">
+              <summary><img src="/static/aid-choking.svg" alt="" width="160" height="88"><span><strong>Choking</strong><small>Kukabwa</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <p><strong>Adult or child over 1 year:</strong> If they can cough or speak, encourage coughing. If they cannot breathe, speak or cough, call 999/112. Lean them forward; give up to 5 firm back blows between the shoulder blades. If not cleared, give up to 5 abdominal thrusts. Alternate 5 and 5.</p>
+                <p><strong>Infant under 1 year:</strong> Call for help. Give up to 5 back blows, then up to 5 chest thrusts. Do not use abdominal thrusts on an infant.</p>
+                <p class="swahili-copy">Ikiwa anaweza kukohoa, mhimize kukohoa. Akishindwa kupumua au kuongea, piga 999/112. Mtoto mkubwa/mtu mzima: hadi mapigo 5 mgongoni, kisha misukumo 5 tumboni; badilisha. Mtoto mchanga chini ya mwaka 1: mapigo 5 mgongoni na misukumo 5 kifuani—si tumboni.</p>
+                <p class="aid-caution">If they become unresponsive, lower them safely, call emergency services, and start CPR following dispatcher guidance. Do not do a blind finger sweep.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="trauma">
+              <summary><img src="/static/aid-burn.svg" alt="" width="160" height="88"><span><strong>Burns</strong><small>Kuungua</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol><li>Stop the burning and cool the area under cool or lukewarm running water for 20 minutes. Keep the rest of the person warm.</li><li>Remove jewellery and loose clothing near the burn; do not pull away anything stuck to skin.</li><li>Cover loosely with clean non-fluffy material or cling film laid over the burn—not wrapped around a limb.</li><li>Get urgent care for large, deep, facial, hand, genital, major joint, electrical or chemical burns; call 999/112 for severe injury.</li></ol>
+                <p class="swahili-copy">Poza sehemu iliyoungua kwa maji yanayotiririka kwa dakika 20. Ondoa mapambo na nguo zisizoganda. Funika kwa kitambaa safi bila kubana. Tafuta huduma haraka kwa jeraha kubwa, la kina, usoni, mkononi, sehemu za siri, umeme au kemikali.</p>
+                <p class="aid-caution">Do not use ice, butter, oils, toothpaste or creams; do not burst blisters. For a chemical burn, protect yourself and rinse with plenty of clean water while getting urgent advice.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="medical">
+              <summary><img src="/static/aid-allergy.svg" alt="" width="160" height="88"><span><strong>Severe allergy</strong><small>Mzio mkali</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol><li>Call 999/112 immediately for breathing difficulty, tongue/throat swelling, collapse or rapidly worsening symptoms.</li><li>Help the person use their own prescribed adrenaline auto-injector as directed; inject into the outer mid-thigh through clothing if the device instructions permit.</li><li>Keep them lying flat with legs raised if this does not worsen breathing. If breathing is difficult, allow them to sit with legs out; do not let them stand or walk.</li><li>If symptoms persist, a second prescribed auto-injector may be used after 5 minutes if available. Follow the dispatcher and device instructions.</li></ol>
+                <p class="swahili-copy">Piga 999/112 mara moja kwa shida ya kupumua, koo/ulimi kuvimba au kuzimia. Msaidie kutumia sindano yake ya adrenaline kulingana na maelekezo. Mweke amelala ikiwa anaweza kupumua; asisimame wala kutembea. Dalili zikiendelea baada ya dakika 5, fuata maelekezo ya mhudumu na kifaa kuhusu dozi nyingine.</p>
+                <p class="aid-caution">Symptoms can return. Emergency medical assessment is needed even if they improve.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="trauma">
+              <summary><img src="/static/aid-fracture.svg" alt="" width="160" height="88"><span><strong>Fracture / sprain</strong><small>Kuvunjika / kuteguka</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol><li>Keep the person still and support the injured part in the position found. Do not straighten it.</li><li>For an open wound, cover it with a clean dressing; do not push exposed bone back in.</li><li>For a closed sprain, a wrapped cold pack for up to 20 minutes may help. Stop if skin becomes numb or painful.</li><li>Get urgent care for deformity, severe pain, numbness, an open fracture, or inability to use the limb.</li></ol>
+                <p class="swahili-copy">Msaidie mtu asisogee na tegemeza kiungo kilivyo—usikinyoshe. Funika jeraha wazi kwa kitambaa safi; usirudishe mfupa ndani. Kwa kuteguka, weka kitu baridi kilichofungwa kwa kitambaa hadi dakika 20.</p>
+                <p class="aid-caution">Do not force movement or apply ice directly to skin. Call 999/112 for major trauma or immediate danger.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="medical">
+              <summary><img src="/static/aid-shock.svg" alt="" width="160" height="88"><span><strong>Shock</strong><small>Mshtuko wa mwili</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol><li>Call 999/112. Shock may follow serious injury or illness; signs can include pale, cold, clammy skin, fast breathing or confusion.</li><li>Help them lie down if comfortable and safe. Do not move them if a spine, hip or leg injury is possible unless there is immediate danger.</li><li>Keep them warm and still; loosen tight clothing. Do not give food or drink.</li><li>Watch breathing and responsiveness. If they become unresponsive and are not breathing normally, start CPR following dispatcher guidance.</li></ol>
+                <p class="swahili-copy">Piga 999/112. Dalili zinaweza kuwa ngozi kupauka, kuwa baridi/jasho, kupumua haraka au kuchanganyikiwa. Mweke alale ikiwa ni salama; usimhamishe ikiwa kuna jeraha la mgongo, nyonga au mguu. Mfunike; usimpe chakula wala kinywaji.</p>
+                <p class="aid-caution">Do not routinely raise the legs after trauma or if it worsens pain or breathing.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="trauma">
+              <summary><img src="/static/aid-snakebite.svg" alt="" width="160" height="88"><span><strong>Snakebite</strong><small>Kuumwa na nyoka</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol><li>Move away from the snake. Keep the person calm and as still as possible; call 999/112 or an ambulance provider and arrange urgent transport to a health facility.</li><li>Keep the bitten limb still and supported. Remove rings, watches or tight items before swelling.</li><li>Note the time of the bite. If safe, remember the snake’s appearance from a distance; do not try to catch or kill it.</li></ol>
+                <p class="swahili-copy">Ondokeni karibu na nyoka. Mtulize mtu na apunguze mwendo; piga 999/112 au ambulensi na tafuteni huduma haraka. Tuliza kiungo kilichoumwa na ondoa pete au vitu vinavyobana kabla hakijavimba.</p>
+                <p class="aid-caution">Do not cut or suck the wound, apply ice or a tourniquet, or delay transport while searching for the snake.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="fire">
+              <summary><img src="/static/aid-fire.svg" alt="" width="160" height="88"><span><strong>Fire response</strong><small>Usalama wakati wa moto</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol>
+                  <li><strong>Rescue:</strong> Help people in immediate danger only if you can do so without entering smoke or fire. Do not delay your own escape.</li>
+                  <li><strong>Alarm:</strong> Activate the nearest fire alarm if safe. From a safe place call 999 or 112; give the building, floor, nearest road/landmark, and whether anyone is trapped.</li>
+                  <li><strong>Contain:</strong> Close doors behind you if this will not delay escape. Do not lock them.</li>
+                  <li><strong>Evacuate:</strong> Use marked stairs, never a lift. Stay low under smoke, go to the agreed assembly point, and do not re-enter.</li>
+                </ol>
+                <p><strong>Small fire only:</strong> Use an appropriate, maintained extinguisher only if you are trained, the fire is still small, and a clear exit is behind you. If it does not go out immediately, leave and close the door.</p>
+                <p><strong>PASS:</strong> Pull the pin, Aim at the base, Squeeze the handle, Sweep across the base. Follow the extinguisher label and building plan; extinguisher classes vary. Never use water on electrical equipment, fuel, or burning cooking oil.</p>
+                <p><strong>If trapped:</strong> Stay in a room with the door closed, block smoke gaps if possible, call 999/112 and state your exact room/floor. Signal from a window only if safe; do not open it into smoke or flames.</p>
+                <p class="swahili-copy">Moto ukitokea: waokoe walio hatarini ikiwa ni salama; toa tahadhari na piga 999/112 ukiwa mahali salama. Toka kwa ngazi, usitumie lifti, kaa chini chini ya moshi, na usirudi ndani. Zima moto mdogo tu ikiwa umefunzwa na njia ya kutoka iko wazi.</p>
+                <p class="aid-caution">Do not fight a spreading fire, breathe smoke, or re-enter for belongings. For a cooking-oil fire, never pour water on it. Follow the marked exit plan and local fire authority instructions.</p>
+              </div>
+            </details>
+
+            <details class="aid-guide" data-category="trauma">
+              <summary><img src="/static/aid-handover.svg" alt="" width="160" height="88"><span><strong>Road crash / handover</strong><small>Ajali ya barabarani / makabidhiano</small></span><span class="aid-expand" aria-hidden="true">+</span></summary>
+              <div class="aid-guide-body">
+                <ol><li>Watch for traffic, fire, fuel, unstable vehicles and electricity. Do not enter danger; call 999/112. Move a casualty only if staying puts them in immediate danger.</li><li>Give the dispatcher the exact location or nearest landmark, callback number, number of injured people and visible hazards.</li><li>At handover, report what happened, when it happened, changes in breathing/responsiveness, bleeding, and first aid given. Mention known allergies or medicines if known.</li></ol>
+                <p class="swahili-copy">Jihadhari na magari, moto, mafuta na nyaya za umeme. Usijiweke hatarini; piga 999/112. Mpe mhudumu mahali/alama ya karibu, nambari ya kurudi, idadi ya waliojeruhiwa na hatari zilizopo. Waeleze wahudumu kilichotokea na msaada uliotoa.</p>
+                <p class="aid-caution">Do not remove a helmet or move someone with a possible neck/back injury unless there is immediate danger or a dispatcher directs you.</p>
+              </div>
+            </details>
+          </div>
+          <p class="first-aid-disclaimer">Educational first-aid reminders · Mwongozo wa jumla wa huduma ya kwanza. Follow the emergency dispatcher and trained responders. These guides should be reviewed against current Kenyan clinical guidance by a qualified clinician before public deployment.</p>
+        </section>
+
+        <div class="safety-note">
+          <span class="safety-icon" aria-hidden="true">i</span>
+          <p><strong>App alerts are simulated only.</strong> In a real emergency in Kenya, call 999 or 112, or tap a listed ambulance provider. Confirm provider numbers are current.</p>
+        </div>
+        <div class="provider-note">
+          <span class="provider-mark" aria-hidden="true">⌖</span>
+          <p>Map tiles and facility search use OpenStreetMap. Searching shares your current coordinates with map-data providers; a Directions link opens Google Maps when you choose it.</p>
+        </div>
+      </section>
+
+      <section class="right-column" aria-label="Map and responder queue">
+        <div class="map-card">
+          <div class="map-heading">
+            <div>
+              <p class="section-kicker">KENYA · LIVE LOCATION</p>
+              <h2>Nearby care</h2>
+            </div>
+            <div class="map-actions">
+              <button class="button button-map" id="searchFacilitiesButton" type="button" disabled>
+                <span aria-hidden="true">⌕</span> Search nearby
+              </button>
+            </div>
+          </div>
+          <div class="map-wrap">
+            <div id="map" role="application" aria-label="Map centered on Kenya showing your selected location and nearby facilities"></div>
+            <div class="map-overlay" id="mapOverlay">
+              <span class="map-crosshair" aria-hidden="true">⌖</span>
+              <strong>Set a location to get started</strong>
+              <span>Allow location access to see your position and search nearby</span>
+            </div>
+            <div class="map-legend" id="mapLegend" hidden>
+              <span><i class="legend-user"></i>Your location</span>
+              <span><i class="legend-hospital"></i>Health facility · verify first</span>
+            </div>
+          </div>
+          <div class="facility-section">
+            <div class="facility-heading">
+              <div>
+                <h3>Facilities nearby</h3>
+                <p id="facilitySubheading" aria-live="polite">Use current location to search within 10 km</p>
+              </div>
+              <div class="facility-results-controls">
+                <label class="sr-only" for="facilityTypeFilter">Filter facilities by type</label>
+                <select id="facilityTypeFilter" class="facility-type-filter" disabled>
+                  <option value="all">All types</option>
+                  <option value="hospital">Hospitals</option>
+                  <option value="clinic">Clinics</option>
+                  <option value="health_centre">Health centres</option>
+                  <option value="dispensary">Dispensaries</option>
+                </select>
+                <span class="result-count" id="facilityCount" aria-live="polite"></span>
+              </div>
+            </div>
+            <div class="facility-list" id="facilityList">
+              <div class="empty-facilities"><span>⌖</span><p>Nearby hospitals, clinics and health centres will appear here.</p></div>
+            </div>
+            <p class="facility-disclaimer" id="facilityDisclaimer" hidden>OpenStreetMap listings may be incomplete or outdated; emergency capability is not verified. Calls and directions open only after you tap a link. This app does not automatically contact facilities or dispatch help.</p>
+          </div>
+        </div>
+
+        <section class="nairobi-directory" aria-labelledby="nairobiDirectoryTitle">
+          <div class="nairobi-directory-heading">
+            <div>
+              <p class="section-kicker">NAIROBI · USER-PROVIDED CONTACTS</p>
+              <h2 id="nairobiDirectoryTitle">A&amp;E and trauma hospitals</h2>
+            </div>
+            <span class="directory-count">4 facilities</span>
+          </div>
+          <p class="directory-notice">Numbers and facility details below have not been independently verified. Confirm the number, location, and current emergency services directly. Tapping Call opens your phone dialer; this app does not contact hospitals.</p>
+          <div class="nairobi-hospital-list">
+            <article class="nairobi-hospital">
+              <div class="nairobi-hospital-title">
+                <span class="hospital-symbol" aria-hidden="true">+</span>
+                <div>
+                  <h3>The Nairobi Hospital</h3>
+                  <p>Argwings Kodhek Road, Nairobi</p>
+                </div>
+              </div>
+              <div class="hospital-actions">
+                <a href="tel:+254202845000">Call 020 284 5000</a>
+                <a href="tel:+254703082000">Call 0703 082 000</a>
+                <a class="directions-link" href="https://www.google.com/maps/search/?api=1&amp;query=The+Nairobi+Hospital%2C+Argwings+Kodhek+Road%2C+Nairobi" target="_blank" rel="noopener noreferrer">Map ↗</a>
+              </div>
+            </article>
+            <article class="nairobi-hospital">
+              <div class="nairobi-hospital-title">
+                <span class="hospital-symbol" aria-hidden="true">+</span>
+                <div>
+                  <h3>KUTRRH</h3>
+                  <p>Northern Bypass / Kiambu Road, Ruiru</p>
+                </div>
+              </div>
+              <div class="hospital-actions">
+                <a href="tel:1558">Call 1558</a>
+                <a href="tel:+254800721038">Call 0800 721 038</a>
+                <a class="directions-link" href="https://www.google.com/maps/search/?api=1&amp;query=Kenyatta+University+Teaching%2C+Referral+and+Research+Hospital%2C+Ruiru%2C+Kenya" target="_blank" rel="noopener noreferrer">Map ↗</a>
+              </div>
+            </article>
+            <article class="nairobi-hospital">
+              <div class="nairobi-hospital-title">
+                <span class="hospital-symbol" aria-hidden="true">+</span>
+                <div>
+                  <h3>M.P. Shah Hospital</h3>
+                  <p>Shivachi Road, Parklands, Nairobi</p>
+                </div>
+              </div>
+              <div class="hospital-actions">
+                <a href="tel:+254111000600">Call 111 000 600</a>
+                <a class="directions-link" href="https://www.google.com/maps/search/?api=1&amp;query=M.P.+Shah+Hospital%2C+Shivachi+Road%2C+Parklands%2C+Nairobi" target="_blank" rel="noopener noreferrer">Map ↗</a>
+              </div>
+            </article>
+            <article class="nairobi-hospital">
+              <div class="nairobi-hospital-title">
+                <span class="hospital-symbol" aria-hidden="true">+</span>
+                <div>
+                  <h3>Kenyatta National Hospital (KNH)</h3>
+                  <p>Hospital Road, Nairobi</p>
+                </div>
+              </div>
+              <div class="hospital-actions">
+                <a href="tel:+254202725272">Call 020 272 5272</a>
+                <a class="directions-link" href="https://www.google.com/maps/search/?api=1&amp;query=Kenyatta+National+Hospital%2C+Hospital+Road%2C+Nairobi" target="_blank" rel="noopener noreferrer">Map ↗</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="queue-card" aria-labelledby="queueTitle">
+          <div class="queue-heading">
+            <div>
+              <p class="section-kicker">LOCAL TEST QUEUE</p>
+              <h2 id="queueTitle">Responder desk</h2>
+            </div>
+            <div class="queue-heading-actions">
+              <span class="queue-count" id="queueCount" aria-live="polite">0 active</span>
+              <button class="incident-action export-button" id="exportIncidentsButton" type="button" disabled>Export CSV</button>
+            </div>
+          </div>
+          <div class="incident-list" id="incidentList" aria-live="polite">
+            <div class="queue-empty">
+              <span class="empty-icon" aria-hidden="true">✓</span>
+              <strong>All clear</strong>
+              <p>Simulated incidents will appear here.</p>
+            </div>
+          </div>
+          <p class="queue-footnote"><span></span> Latest 50 test records are stored in this app’s local SQLite database. Export includes timestamps and coordinates. No responders are notified.</p>
+        </section>
+
+        <section class="medic-portal" aria-labelledby="medicPortalTitle">
+          <details id="medicPortal">
+            <summary>
+              <span class="medical-id-mark" aria-hidden="true">+</span>
+              <span class="medical-id-heading"><strong id="medicPortalTitle">Medic sign in</strong><small>Authorized accounts only · assigned incidents</small></span>
+              <span class="aid-expand" aria-hidden="true">+</span>
+            </summary>
+            <div class="medic-portal-content">
+              <p class="medic-privacy-notice">Simulation portal. Patient details are shown only when the patient opted in and a dispatcher assigned the incident to your account. Do not use real patient information until secure hosting, encryption, and privacy review are complete.</p>
+              <p id="medicAuthStatus" class="medic-status" role="status" aria-live="polite">Checking sign-in configuration…</p>
+              <form id="medicSignInForm" class="medic-sign-in" hidden>
+                <label>Email <input id="medicEmail" type="email" autocomplete="username" required maxlength="254"></label>
+                <label>Password <input id="medicPassword" type="password" autocomplete="current-password" required maxlength="256"></label>
+                <button class="button button-secondary" type="submit">Sign in</button>
+              </form>
+              <div id="medicSession" hidden>
+                <div class="medic-session-header">
+                  <span id="medicAccountLabel"></span>
+                  <button class="text-button" id="medicSignOutButton" type="button">Sign out</button>
+                </div>
+                <div class="medic-list-header">
+                  <h3>Incidents assigned to you</h3>
+                  <button class="incident-action" id="refreshMedicIncidents" type="button">Refresh</button>
+                </div>
+                <div id="medicIncidentList" class="medic-incident-list" aria-live="polite"></div>
+                <div id="dispatchAssignmentPanel" class="dispatch-assignment" hidden>
+                  <h3>Dispatcher · assign an incident</h3>
+                  <label for="dispatchIncidentSelect">Active incident</label>
+                  <select id="dispatchIncidentSelect"></select>
+                  <label for="assignedMedicUid">Authorized medic Firebase UID</label>
+                  <input id="assignedMedicUid" type="text" maxlength="128" autocomplete="off">
+                  <button class="button button-secondary" id="assignIncidentButton" type="button">Assign incident</button>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+      </section>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="connection-notice" id="connectionNotice" role="status" aria-live="polite" hidden>
+      Offline: first-aid guides remain available after this page has loaded once. Maps, facility search, and the responder queue need internet.
+    </div>
+
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script defer src="/static/app.js"></script>
+  </body>
+</html>

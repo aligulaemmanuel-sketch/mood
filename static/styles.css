@@ -1,0 +1,955 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  color-scheme: light;
+  --ink: #14283d;
+  --muted: #738399;
+  --line: #e8edf2;
+  --navy: #102a43;
+  --blue: #2874a6;
+  --teal: #d9f2ee;
+  --paper: #f5f8fa;
+  --white: #fff;
+  --red: #d94d56;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 360px;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 85% 4%, rgba(216, 241, 238, .62), transparent 28rem),
+    var(--paper);
+}
+
+button { font: inherit; }
+button:focus-visible, a:focus-visible { outline: 3px solid #6faec5; outline-offset: 3px; }
+
+.topbar {
+  height: 72px;
+  padding: 0 clamp(22px, 5vw, 76px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,.82);
+  border-bottom: 1px solid rgba(222,231,236,.8);
+}
+
+.brand {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--navy);
+  font: 800 21px Manrope, sans-serif;
+  letter-spacing: -1px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: #fff;
+  background: #193d59;
+  font: 800 15px Manrope, sans-serif;
+  letter-spacing: 0;
+}
+
+.brand-period { color: #51afaa; }
+.topbar-right { display: flex; align-items: center; gap: 18px; }
+
+.environment-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  border: 1px solid #cce4df;
+  border-radius: 20px;
+  color: #34736d;
+  background: #f3fbf9;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: #54ae91; }
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: #53687a;
+  background: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.layout {
+  width: min(1320px, calc(100% - 64px));
+  margin: 42px auto 60px;
+  display: grid;
+  grid-template-columns: minmax(340px, .82fr) minmax(520px, 1.18fr);
+  gap: clamp(36px, 6vw, 90px);
+  align-items: start;
+}
+
+.left-column { padding-top: 12px; }
+.eyebrow, .section-kicker { color: #698094; font-size: 9px; font-weight: 700; letter-spacing: 1.65px; }
+.eyebrow { display: flex; align-items: center; gap: 9px; }
+.eyebrow-line { width: 19px; height: 2px; background: #54aaa4; }
+
+h1 {
+  margin: 22px 0 15px;
+  color: var(--navy);
+  font: 800 clamp(38px, 4.1vw, 56px)/1.07 Manrope, sans-serif;
+  letter-spacing: -2.7px;
+}
+
+.heading-accent { color: #428b91; }
+.intro { max-width: 440px; margin: 0; color: #6a7c8e; font-size: 13px; line-height: 1.75; }
+
+.sos-card, .map-card, .queue-card {
+  border: 1px solid rgba(222,231,236,.9);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 14px 42px rgba(27,57,79,.055);
+}
+
+.sos-card { margin-top: 28px; padding: 22px; }
+.kenya-emergency { margin-top: 12px; padding: 14px 15px; border: 1px solid #f0dfc7; border-radius: 12px; background: #fffaf1; }
+.kenya-emergency-copy { display: flex; align-items: center; gap: 9px; }
+.kenya-emergency-icon { width: 23px; height: 23px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 8px; color: #fff; background: #bb5848; font: 700 13px Manrope, sans-serif; }
+.kenya-emergency-copy > div { display: grid; gap: 3px; }
+.kenya-emergency-copy strong { color: #71483d; font-size: 10px; }
+.kenya-emergency-copy div span { color: #947a6b; font-size: 8px; line-height: 1.4; }
+.kenya-contact-list { margin: 13px 0 0 32px; display: grid; gap: 10px; }
+.kenya-contact-group { display: grid; gap: 6px; }
+.kenya-contact-group > strong { color: #76594d; font-size: 8px; }
+.kenya-emergency-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.kenya-emergency-actions a, .kenya-contact-extra a { padding: 6px 9px; border: 1px solid #edd8bd; border-radius: 7px; color: #885443; background: #fff; font-size: 9px; font-weight: 700; text-decoration: none; }
+.kenya-emergency-actions a:hover { background: #fff3e4; }
+.kenya-contact-extra a { padding: 0; border: 0; color: #987052; background: transparent; font-size: 8px; }
+.kenya-contact-extra a:hover { text-decoration: underline; }
+.kenya-emergency-swahili { margin: 10px 0 0 32px; color: #987d6e; font-size: 8px; line-height: 1.5; }
+.first-aid-card {
+  margin-top: 15px;
+  padding: 19px;
+  overflow: hidden;
+  border: 1px solid #dceae6;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(27,57,79,.045);
+}
+.first-aid-heading { display: flex; align-items: center; justify-content: space-between; }
+.first-aid-heading h2 { margin: 0; color: var(--navy); font: 700 17px Manrope, sans-serif; letter-spacing: -.4px; }
+.first-aid-cross { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 10px; color: #438d81; background: #e8f5f1; font: 700 22px Manrope, sans-serif; }
+.first-aid-image { width: 100%; height: auto; max-height: 135px; margin: 14px 0 12px; display: block; border-radius: 11px; object-fit: cover; }
+.first-aid-steps { margin: 0; padding: 0; display: grid; gap: 10px; list-style: none; }
+.first-aid-steps li { display: grid; grid-template-columns: 21px 1fr; align-items: start; gap: 8px; }
+.first-aid-steps li > span { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 7px; color: #43877f; background: #edf7f4; font-size: 9px; font-weight: 700; }
+.first-aid-steps p { margin: 2px 0 0; color: #718291; font-size: 9px; line-height: 1.55; }
+.first-aid-steps strong { color: #354f60; }
+.swahili-copy { margin-top: 3px; display: block; color: #668d86; font-size: 8px; line-height: 1.5; }
+.first-aid-disclaimer { margin: 13px 0 0; padding-top: 10px; border-top: 1px solid #edf2f1; color: #8a9a9e; font-size: 8px; line-height: 1.55; }
+.aid-subheading { margin: 18px 0 9px; color: #355468; font: 700 12px Manrope, sans-serif; }
+.drabc-list { margin: 0; padding: 0; display: grid; gap: 7px; list-style: none; }
+.drabc-list li { padding: 8px; display: grid; grid-template-columns: 26px 1fr; align-items: start; gap: 8px; border: 1px solid #edf2f2; border-radius: 9px; background: #fcfdfd; }
+.drabc-letter { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 8px; color: #43877f; background: #eaf5f2; font: 800 12px Manrope, sans-serif; }
+.drabc-list li > div > strong { color: #354f60; font-size: 9px; }
+.drabc-list li p { margin: 3px 0 0; color: #718291; font-size: 8px; line-height: 1.5; }
+.aid-emergency-reminder { margin: 11px 0 0; padding: 10px 11px; border-left: 3px solid #cb6555; border-radius: 6px; color: #79564e; background: #fff5f0; font-size: 9px; font-weight: 600; line-height: 1.55; }
+.aid-guide-intro { margin: 0 0 10px; color: #82909b; font-size: 8px; line-height: 1.5; }
+.aid-guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.aid-guide { min-width: 0; align-self: start; border: 1px solid #e8eeee; border-radius: 10px; background: #fcfdfd; overflow: hidden; }
+.aid-guide summary { min-height: 75px; padding: 7px; display: grid; grid-template-columns: 78px 1fr 16px; align-items: center; gap: 7px; list-style: none; cursor: pointer; }
+.aid-guide summary::-webkit-details-marker { display: none; }
+.aid-guide summary img { width: 78px; height: 54px; display: block; border-radius: 7px; object-fit: cover; background: #f2f6f7; }
+.aid-guide summary > span:nth-child(2) { min-width: 0; display: grid; gap: 4px; }
+.aid-guide summary strong { color: #304a5c; font: 700 9px/1.3 Manrope, sans-serif; }
+.aid-guide summary small { color: #728c87; font-size: 7px; line-height: 1.35; }
+.aid-expand { color: #58928a; font-size: 17px; font-weight: 500; transition: transform .18s ease; }
+.aid-guide[open] .aid-expand { transform: rotate(45deg); }
+.aid-guide summary:focus-visible { outline: 3px solid #6faec5; outline-offset: -3px; }
+.aid-guide-body { padding: 1px 11px 11px; border-top: 1px solid #edf2f1; }
+.aid-guide-body ol { margin: 9px 0 0; padding-left: 18px; color: #617485; font-size: 8px; line-height: 1.55; }
+.aid-guide-body ol li { margin-bottom: 5px; padding-left: 2px; }
+.aid-guide-body p { margin: 8px 0 0; color: #617485; font-size: 8px; line-height: 1.55; }
+.aid-guide-body .swahili-copy { color: #56857d; }
+.aid-guide-body .aid-caution { padding: 7px 8px; border-radius: 6px; color: #846b4a; background: #faf5ea; font-size: 7px; }
+.card-topline, .map-heading, .queue-heading, .facility-heading { display: flex; align-items: center; justify-content: space-between; }
+.section-kicker { margin: 0 0 6px; font-size: 8px; }
+h2, h3, p { margin-top: 0; }
+.card-topline h2, .map-heading h2, .queue-heading h2 { margin: 0; color: var(--navy); font: 700 20px Manrope, sans-serif; letter-spacing: -.5px; }
+.shield-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 11px; color: #4a9290; background: #e8f6f3; font-size: 20px; }
+.card-copy { margin: 11px 0 17px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+
+.location-status { min-height: 38px; padding: 0 10px; display: flex; align-items: center; gap: 9px; border: 1px solid #e8edf1; border-radius: 9px; color: #596e80; background: #fafcfd; font-size: 10px; }
+.location-indicator { width: 7px; height: 7px; border-radius: 50%; background: #c4ced7; }
+.location-status.is-set .location-indicator { background: #53a897; box-shadow: 0 0 0 3px #def1eb; }
+.accuracy { margin-left: auto; color: #8494a2; font-size: 9px; }
+.location-actions { margin: 9px 0 17px; display: flex; align-items: center; justify-content: space-between; }
+
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 9px; cursor: pointer; transition: background .16s ease, transform .16s ease; }
+.button:disabled { opacity: .46; cursor: not-allowed; }
+.button:not(:disabled):active { transform: translateY(1px); }
+.button-small { padding: 8px 10px; }
+.button-secondary { border: 1px solid #e3eaf0; color: #425f74; background: white; font-size: 10px; font-weight: 600; }
+.button-secondary:hover:not(:disabled), .button-map:hover:not(:disabled) { background: #f1f7f8; }
+.text-button { padding: 5px 0; border: 0; color: #347d83; background: transparent; font-size: 10px; font-weight: 600; cursor: pointer; }
+.text-button:hover { color: #1c5d64; text-decoration: underline; }
+
+.alert-buttons { display: grid; gap: 9px; }
+.button-sos, .button-crash { width: 100%; min-height: 57px; justify-content: flex-start; padding: 9px 12px; text-align: left; }
+.button-sos { color: #fff; background: var(--navy); }
+.button-sos:hover:not(:disabled) { background: #1b4562; }
+.button-crash { border: 1px solid #e4eaf0; color: var(--ink); background: #fff; }
+.button-crash:hover:not(:disabled) { background: #f7fafb; }
+.button-sos > span:nth-child(2), .button-crash > span:nth-child(2) { flex: 1; display: grid; gap: 4px; }
+.button-sos strong, .button-crash strong { font-size: 11px; font-weight: 700; }
+.button-sos small, .button-crash small { color: #a8c0ce; font-size: 7px; font-weight: 700; letter-spacing: 1px; }
+.button-crash small { color: #8a9aa7; }
+.sos-icon, .crash-icon { width: 31px; height: 31px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 10px; font-weight: 700; }
+.sos-icon { color: #fff; background: #d65b64; font-size: 16px; }
+.crash-icon { color: #417d87; background: #e5f3f2; font-size: 21px; }
+.button-arrow { font-size: 14px; opacity: .72; }
+
+.countdown-panel { margin-bottom: 14px; padding: 12px; display: flex; align-items: center; gap: 10px; border: 1px solid #f1d8ce; border-radius: 11px; background: #fff8f4; }
+.countdown-ring { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border: 2px solid #e29b7a; border-radius: 50%; color: #a14c39; font: 700 16px Manrope, sans-serif; }
+.countdown-panel > div:nth-child(2) { flex: 1; }
+.countdown-panel strong { color: #804638; font-size: 10px; }
+.countdown-panel p { margin: 3px 0 0; color: #9c766a; font-size: 9px; }
+.button-cancel { padding: 7px 10px; border: 1px solid #edcabc; color: #9a4f3d; background: white; font-size: 9px; font-weight: 700; }
+.inline-message { min-height: 0; margin: 0; color: #4d817a; font-size: 10px; line-height: 1.5; }
+.inline-message:not(:empty) { margin-top: 11px; }
+
+.safety-note, .provider-note { margin: 17px 4px 0; display: flex; align-items: flex-start; gap: 10px; }
+.safety-icon { width: 19px; height: 19px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 50%; color: #a57637; background: #fff3da; font: 700 11px Georgia, serif; }
+.safety-note p, .provider-note p { margin: 1px 0 0; color: #78889a; font-size: 9px; line-height: 1.55; }
+.safety-note strong { color: #657587; }
+.provider-note { margin-top: 10px; }
+.provider-mark { width: 19px; flex: 0 0 auto; color: #51938b; font-size: 16px; line-height: 18px; text-align: center; }
+
+.right-column { display: grid; gap: 16px; }
+.map-card { overflow: hidden; }
+.map-heading { padding: 19px 21px 16px; }
+.button-map { padding: 9px 12px; border: 1px solid #dfe9ed; color: #376d76; background: #fff; font-size: 10px; font-weight: 700; }
+.map-wrap { position: relative; height: 280px; overflow: hidden; background: #e8f0ed; }
+#map { width: 100%; height: 100%; z-index: 1; }
+.map-overlay { position: absolute; z-index: 400; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #637c88; background: rgba(239,246,244,.91); text-align: center; }
+.map-overlay[hidden] { display: none; }
+.map-overlay strong { color: #486274; font: 700 12px Manrope, sans-serif; }
+.map-overlay > span:last-child { color: #83949d; font-size: 10px; }
+.map-crosshair { color: #69a6a0; font-size: 26px; }
+.map-legend { position: absolute; z-index: 500; left: 10px; bottom: 10px; display: flex; gap: 10px; padding: 7px 9px; border: 1px solid rgba(221,230,232,.9); border-radius: 7px; color: #536877; background: rgba(255,255,255,.92); font-size: 8px; }
+.map-legend[hidden] { display: none; }
+.map-legend span { display: flex; align-items: center; gap: 5px; }
+.legend-user, .legend-hospital { width: 7px; height: 7px; display: inline-block; border-radius: 50%; background: #4b9e91; }
+.legend-hospital { background: #d65760; }
+.facility-section { padding: 16px 21px 17px; border-top: 1px solid #eef2f4; }
+.facility-heading h3 { margin: 0 0 4px; color: #233d52; font: 700 12px Manrope, sans-serif; }
+.facility-heading p { margin: 0; color: #8997a4; font-size: 9px; }
+.result-count { color: #69928e; font-size: 9px; font-weight: 700; }
+.facility-list { margin-top: 11px; display: grid; gap: 7px; max-height: 175px; overflow-y: auto; }
+.empty-facilities { padding: 13px; display: flex; align-items: center; gap: 10px; border: 1px dashed #e2e9ec; border-radius: 9px; color: #81919d; }
+.empty-facilities > span { color: #65a69d; font-size: 20px; }
+.empty-facilities p { margin: 0; font-size: 9px; }
+.facility-row { padding: 9px 10px; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 5px 10px; border: 1px solid #edf1f3; border-radius: 9px; background: #fcfdfd; }
+.facility-name { overflow: hidden; color: #29455a; font-size: 10px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.facility-distance { color: #4d8b82; font-size: 9px; font-weight: 700; white-space: nowrap; }
+.facility-meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; color: #84929d; font-size: 8px; }
+.facility-meta a { color: #4b8390; text-decoration: none; }
+.facility-meta a:hover { text-decoration: underline; }
+.facility-disclaimer { margin: 10px 0 0; color: #9b8160; font-size: 8px; line-height: 1.5; }
+.facility-disclaimer[hidden] { display: none; }
+
+.nairobi-directory { padding: 18px 20px; border: 1px solid rgba(222,231,236,.9); border-radius: 17px; background: #fff; box-shadow: 0 12px 35px rgba(27,57,79,.045); }
+.nairobi-directory-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.nairobi-directory-heading h2 { margin: 0; color: var(--navy); font: 700 16px Manrope, sans-serif; letter-spacing: -.4px; }
+.directory-count { padding: 6px 9px; border-radius: 14px; color: #597f79; background: #edf6f3; font-size: 8px; font-weight: 700; white-space: nowrap; }
+.directory-notice { margin: 10px 0 13px; color: #8a7b6f; font-size: 8px; line-height: 1.55; }
+.nairobi-hospital-list { display: grid; gap: 8px; }
+.nairobi-hospital { padding: 11px; border: 1px solid #eaf0f1; border-radius: 10px; background: #fcfdfd; }
+.nairobi-hospital-title { display: flex; align-items: flex-start; gap: 9px; }
+.hospital-symbol { width: 23px; height: 23px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 7px; color: #46887f; background: #e8f4f1; font: 700 17px Manrope, sans-serif; }
+.nairobi-hospital-title h3 { margin: 2px 0 3px; color: #304a5c; font: 700 10px Manrope, sans-serif; }
+.nairobi-hospital-title p { margin: 0; color: #82909b; font-size: 8px; line-height: 1.4; }
+.hospital-actions { margin: 9px 0 0 32px; display: flex; flex-wrap: wrap; gap: 6px; }
+.hospital-actions a { padding: 6px 8px; border: 1px solid #dfeae7; border-radius: 7px; color: #42766f; background: #fff; font-size: 8px; font-weight: 700; text-decoration: none; }
+.hospital-actions a:hover { background: #f0f8f6; }
+.hospital-actions a.directions-link { border-color: transparent; color: #65838e; background: transparent; }
+
+.queue-card { padding: 18px 20px 14px; }
+.queue-heading { margin-bottom: 12px; }
+.queue-heading h2 { font-size: 17px; }
+.queue-count { padding: 6px 9px; border-radius: 20px; color: #598780; background: #ecf7f4; font-size: 9px; font-weight: 700; }
+.incident-list { display: grid; gap: 8px; max-height: 235px; overflow-y: auto; }
+.queue-empty { padding: 17px 10px 15px; display: flex; flex-direction: column; align-items: center; border: 1px dashed #e4ebee; border-radius: 10px; }
+.empty-icon { width: 30px; height: 30px; margin-bottom: 7px; display: grid; place-items: center; border-radius: 50%; color: #438a79; background: #e8f5ee; font-size: 14px; }
+.queue-empty strong { color: #476475; font: 700 11px Manrope, sans-serif; }
+.queue-empty p { margin: 4px 0 0; color: #93a0aa; font-size: 9px; }
+.incident-row { padding: 10px; display: grid; grid-template-columns: 1fr auto; gap: 8px; border: 1px solid #e9eef1; border-radius: 10px; }
+.incident-top { display: flex; align-items: center; gap: 7px; }
+.incident-title { color: #284255; font-size: 10px; font-weight: 700; }
+.incident-time { margin-top: 4px; color: #8a99a5; font-size: 8px; }
+.status-pill { padding: 4px 7px; border-radius: 10px; font-size: 7px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+.status-active { color: #a36a32; background: #fff3df; }
+.status-acknowledged { color: #357c79; background: #e5f4f1; }
+.status-resolved, .status-cancelled { color: #6d7f8b; background: #eef2f4; }
+.incident-actions { display: flex; align-items: center; gap: 6px; }
+.incident-action { padding: 6px 8px; border: 1px solid #e2e9ed; border-radius: 7px; color: #49727d; background: #fff; font-size: 8px; font-weight: 700; cursor: pointer; }
+.incident-action:hover { background: #f2f8f7; }
+.incident-action.resolve { color: #52775d; }
+.queue-footnote { margin: 11px 0 0; display: flex; align-items: center; gap: 6px; color: #9aa6ae; font-size: 8px; }
+.queue-footnote span { width: 5px; height: 5px; border-radius: 50%; background: #65ad91; }
+
+.toast { position: fixed; z-index: 2000; right: 24px; bottom: 22px; max-width: min(380px, calc(100vw - 32px)); padding: 12px 15px; border: 1px solid #d7e8e2; border-radius: 10px; color: #41675f; background: #f5fcf9; box-shadow: 0 8px 30px #15324b1a; font-size: 11px; line-height: 1.5; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s ease, transform .2s ease; }
+.toast.is-visible { opacity: 1; transform: translateY(0); }
+.toast.is-error { border-color: #f1d7d2; color: #96584f; background: #fff8f6; }
+
+@media (min-width: 1450px) { .layout { margin-top: 54px; } }
+@media (max-width: 920px) {
+  .layout { width: min(650px, calc(100% - 36px)); grid-template-columns: 1fr; gap: 28px; margin-top: 30px; }
+  .left-column { padding-top: 0; }
+  h1 { font-size: clamp(42px, 9vw, 56px); }
+}
+@media (max-width: 520px) {
+  .topbar { height: 62px; padding: 0 18px; }
+  .environment-pill { padding: 7px 9px; font-size: 8px; }
+  .topbar-right { gap: 9px; }
+  .layout { width: calc(100% - 28px); margin: 25px auto 40px; }
+  .sos-card { padding: 17px; }
+  .map-wrap { height: 245px; }
+  .map-heading, .facility-section { padding-right: 15px; padding-left: 15px; }
+  .map-legend { max-width: calc(100% - 20px); flex-wrap: wrap; }
+  .countdown-panel { gap: 7px; }
+  .countdown-panel p { font-size: 8px; }
+  .aid-guide-grid { grid-template-columns: 1fr; }
+  .aid-guide summary { grid-template-columns: 88px 1fr 18px; }
+  .aid-guide summary img { width: 88px; height: 58px; }
+}
+
+/* Dark glass UI */
+:root {
+  color-scheme: dark;
+  --ink: #e7edf7;
+  --muted: #9aa9bd;
+  --line: rgba(195, 211, 235, .15);
+  --paper: #070b16;
+}
+
+body {
+  color: #e7edf7;
+  background:
+    radial-gradient(ellipse at 16% 8%, rgba(216, 39, 93, .2), transparent 30rem),
+    radial-gradient(ellipse at 82% 17%, rgba(91, 63, 209, .2), transparent 31rem),
+    radial-gradient(ellipse at 58% 88%, rgba(18, 135, 165, .14), transparent 30rem),
+    #070b16;
+}
+
+body::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background-image: linear-gradient(rgba(138, 158, 191, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(138, 158, 191, .025) 1px, transparent 1px);
+  background-size: 46px 46px;
+  content: "";
+  pointer-events: none;
+}
+
+.topbar {
+  position: sticky;
+  z-index: 1000;
+  top: 0;
+  border-color: rgba(195, 211, 235, .12);
+  background: rgba(7, 11, 22, .72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.brand, h1, .card-topline h2, .map-heading h2, .queue-heading h2,
+.first-aid-heading h2, .nairobi-directory-heading h2 {
+  color: #edf2fb;
+}
+
+.brand-mark { background: linear-gradient(145deg, #f05172, #a92156); box-shadow: 0 5px 22px rgba(230, 52, 103, .3); }
+.brand-period, .heading-accent { color: #5ee1ca; }
+.eyebrow, .section-kicker { color: #91a2bc; }
+.intro, .card-copy { color: #a4b1c4; }
+.icon-button { border-color: rgba(203, 218, 241, .14); color: #d3dded; background: rgba(255,255,255,.06); }
+.environment-pill { border-color: rgba(77, 212, 176, .25); color: #75e3c4; background: rgba(23, 118, 97, .15); }
+
+.sos-card, .map-card, .queue-card, .first-aid-card, .nairobi-directory,
+.medical-id-card {
+  border-color: rgba(199, 215, 241, .14);
+  background: rgba(15, 23, 42, .69);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255,255,255,.035);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.first-aid-card { border-color: rgba(72, 196, 173, .18); }
+.shield-icon, .first-aid-cross { color: #66d8bf; background: rgba(48, 177, 150, .14); }
+.location-status, .button-crash, .button-secondary {
+  border-color: rgba(198, 215, 237, .15);
+  color: #d7e1ef;
+  background: rgba(255,255,255,.045);
+}
+.location-status { color: #d3deec; }
+.accuracy, .location-actions .text-button { color: #72d9c2; }
+.button-secondary:hover:not(:disabled), .button-map:hover:not(:disabled) { background: rgba(255,255,255,.1); }
+.button-sos { color: #fff; background: linear-gradient(115deg, #dc3e68, #a72258); box-shadow: 0 8px 26px rgba(211, 43, 95, .22); }
+.button-sos:hover:not(:disabled) { background: linear-gradient(115deg, #ec4d76, #bc2b65); }
+.button-crash { color: #e7edf7; }
+.button-crash:hover:not(:disabled) { background: rgba(255,255,255,.09); }
+.button-crash small { color: #a4b1c4; }
+.crash-icon { color: #a9a0ff; background: rgba(118, 105, 235, .18); }
+.sos-icon { background: #fa6680; }
+.text-button { color: #6cddc7; }
+
+.kenya-emergency {
+  border-color: rgba(238, 170, 104, .2);
+  background: rgba(103, 61, 38, .2);
+}
+.kenya-emergency-copy strong, .kenya-contact-group > strong { color: #f0c39a; }
+.kenya-emergency-copy div span, .kenya-emergency-swahili { color: #c3ad99; }
+.kenya-emergency-actions a, .kenya-contact-extra a {
+  border-color: rgba(240, 191, 142, .23);
+  color: #ffd3aa;
+  background: rgba(255,255,255,.045);
+}
+.kenya-contact-extra a { border-color: transparent; background: transparent; color: #e8bb8d; }
+
+.first-aid-image { opacity: .9; }
+.aid-subheading { color: #d8e6f4; }
+.drabc-list li, .aid-guide, .nairobi-hospital, .facility-row {
+  border-color: rgba(195, 211, 235, .12);
+  background: rgba(255,255,255,.035);
+}
+.drabc-letter, .aid-guide summary img, .hospital-symbol {
+  color: #72e0c3;
+  background: rgba(48, 177, 150, .14);
+}
+.drabc-list li > div > strong, .aid-guide summary strong, .nairobi-hospital-title h3,
+.facility-name {
+  color: #e2eaf5;
+}
+.drabc-list li p, .aid-guide-intro, .aid-guide summary small, .aid-guide-body ol,
+.aid-guide-body p, .first-aid-steps p { color: #a8b5c8; }
+.swahili-copy, .aid-guide-body .swahili-copy { color: #82d8c6; }
+.aid-guide-body { border-color: rgba(195, 211, 235, .11); }
+.aid-guide-body .aid-caution { color: #f3cb93; background: rgba(129, 83, 35, .18); }
+.aid-emergency-reminder { border-color: #fa6680; color: #ffd8dc; background: rgba(154, 38, 65, .2); }
+.first-aid-disclaimer, .directory-notice { border-color: rgba(195, 211, 235, .11); color: #9eacbf; }
+.aid-filter { border-color: rgba(195, 211, 235, .14); color: #b7c3d5; background: rgba(255,255,255,.04); }
+.aid-filter:hover, .aid-filter.is-active { border-color: rgba(86, 220, 193, .38); color: #94f0d7; background: rgba(35, 155, 132, .16); }
+.aid-filter-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.aid-filter { padding: 6px 9px; border: 1px solid; border-radius: 20px; font-size: 8px; cursor: pointer; }
+.aid-guide[hidden] { display: none; }
+
+.aid-guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.aid-guide summary { min-height: 75px; padding: 7px; display: grid; grid-template-columns: 78px 1fr 16px; align-items: center; gap: 7px; list-style: none; cursor: pointer; }
+.aid-guide summary::-webkit-details-marker { display: none; }
+.aid-guide summary img { width: 78px; height: 54px; display: block; border-radius: 7px; object-fit: cover; background: rgba(255,255,255,.06); }
+.aid-guide summary > span:nth-child(2) { min-width: 0; display: grid; gap: 4px; }
+.aid-guide summary strong { color: #e2eaf5; font: 700 9px/1.3 Manrope, sans-serif; }
+.aid-guide summary small { color: #82d8c6; font-size: 7px; line-height: 1.35; }
+.aid-expand { color: #72e0c3; }
+.aid-guide[open] .aid-expand { transform: rotate(45deg); }
+.aid-guide summary:focus-visible { outline: 3px solid #6faec5; outline-offset: -3px; }
+.aid-guide-body { padding: 1px 11px 11px; border-top: 1px solid rgba(195, 211, 235, .11); }
+.aid-guide-body ol { margin: 9px 0 0; padding-left: 18px; color: #a8b5c8; font-size: 8px; line-height: 1.55; }
+.aid-guide-body ol li { margin-bottom: 5px; padding-left: 2px; }
+.aid-guide-body p { margin: 8px 0 0; color: #a8b5c8; font-size: 8px; line-height: 1.55; }
+.aid-guide-body .swahili-copy { color: #82d8c6; }
+.aid-guide-body .aid-caution { padding: 7px 8px; border-radius: 6px; color: #f3cb93; background: rgba(129, 83, 35, .18); font-size: 7px; }
+
+.map-heading h2, .queue-heading h2, .facility-heading h3 { color: #e2eaf5; }
+.button-map {
+  border: 1px solid rgba(195, 211, 235, .17);
+  color: #d1def0;
+  background: rgba(255,255,255,.055);
+}
+.map-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+.map-wrap { background: #101a2b; }
+.map-wrap .leaflet-tile { filter: brightness(.62) saturate(.62) hue-rotate(7deg); }
+.map-legend { border-color: rgba(210, 221, 240, .13); color: #d1dceb; background: rgba(12, 18, 32, .91); }
+.facility-section { border-color: rgba(195, 211, 235, .1); }
+.facility-heading h3 { color: #e2eaf5; }
+.facility-heading p, .facility-meta, .nairobi-hospital-title p, .empty-facilities { color: #9baac0; }
+.facility-row { border-color: rgba(195, 211, 235, .12); background: rgba(255,255,255,.035); }
+.facility-name { color: #e2eaf5; }
+.facility-distance, .result-count { color: #7ee0c6; }
+.facility-meta a { color: #8bdccc; }
+.facility-disclaimer { color: #d6bd91; }
+.nairobi-directory-heading h2 { color: #e2eaf5; }
+.directory-count, .queue-count { color: #8ce2cb; background: rgba(34, 141, 117, .17); }
+.hospital-actions a { border-color: rgba(124, 219, 198, .18); color: #9de8d4; background: rgba(255,255,255,.045); }
+.hospital-actions a.directions-link { color: #b6c3d4; background: transparent; }
+.hospital-actions a:hover { background: rgba(255,255,255,.09); }
+
+.queue-empty { border-color: rgba(195, 211, 235, .15); }
+.queue-empty strong, .incident-title { color: #e2eaf5; }
+.queue-empty p, .incident-time, .queue-footnote { color: #9baac0; }
+.incident-row { border-color: rgba(195, 211, 235, .12); background: rgba(255,255,255,.035); }
+.incident-action { border-color: rgba(195, 211, 235, .16); color: #a6e5d7; background: rgba(255,255,255,.04); }
+.incident-action:hover { background: rgba(255,255,255,.1); }
+.status-active { color: #f2c887; background: rgba(155, 104, 35, .2); }
+.status-acknowledged { color: #92e3d2; background: rgba(41, 136, 117, .2); }
+.status-resolved, .status-cancelled { color: #bac6d6; background: rgba(255,255,255,.09); }
+.safety-note p, .provider-note p { color: #a2b0c2; }
+.countdown-panel { border-color: rgba(241, 161, 130, .25); background: rgba(111, 58, 42, .2); }
+.countdown-panel strong { color: #ffd4be; }
+.countdown-panel p { color: #d0a996; }
+.countdown-ring { color: #ffd3bd; }
+.button-cancel { border-color: rgba(241, 161, 130, .3); color: #ffd1bc; background: rgba(255,255,255,.06); }
+.inline-message { color: #8ce2cb; }
+.map-overlay { color: #b8c5d7; background: rgba(12, 18, 32, .9); }
+.map-overlay strong { color: #e2eaf5; }
+.map-overlay > span:last-child { color: #a8b5c8; }
+.empty-facilities { border-color: rgba(195, 211, 235, .16); }
+.toast { border-color: rgba(87, 205, 176, .24); color: #b4ebdc; background: rgba(14, 35, 38, .97); }
+.toast.is-error { border-color: rgba(239, 123, 123, .24); color: #ffc1c1; background: rgba(48, 23, 32, .97); }
+
+.medical-id-card {
+  margin-top: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(199, 215, 241, .14);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, .69);
+  box-shadow: 0 14px 36px rgba(0,0,0,.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.medical-id-card > summary { padding: 13px 15px; display: flex; align-items: center; gap: 9px; list-style: none; cursor: pointer; }
+.medical-id-card > summary::-webkit-details-marker { display: none; }
+.medical-id-card > summary:focus-visible { outline: 3px solid #6faec5; outline-offset: -3px; }
+.medical-id-mark { width: 29px; height: 29px; display: grid; place-items: center; border-radius: 9px; color: #a9a0ff; background: rgba(118,105,235,.16); font: 700 9px Manrope,sans-serif; }
+.medical-id-heading { flex: 1; display: grid; gap: 3px; }
+.medical-id-heading strong { color: #e3eaf5; font: 700 10px Manrope,sans-serif; }
+.medical-id-heading small { color: #9baac0; font-size: 8px; }
+.medical-id-content { padding: 0 15px 14px; border-top: 1px solid rgba(195,211,235,.1); }
+.medical-id-notice { margin: 11px 0; color: #d3bc94; font-size: 8px; line-height: 1.55; }
+.medical-id-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+.medical-id-fields label { min-width: 0; display: grid; gap: 4px; color: #bac7d9; font-size: 8px; }
+.medical-id-fields .medical-id-wide { grid-column: 1 / -1; }
+.medical-id-fields input, .medical-id-fields textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(195,211,235,.16);
+  border-radius: 7px;
+  outline: none;
+  color: #e8edf7;
+  background: rgba(255,255,255,.045);
+  font: inherit;
+  font-size: 9px;
+}
+.medical-id-fields input:focus, .medical-id-fields textarea:focus { border-color: rgba(99,220,192,.6); }
+.medical-id-fields textarea { resize: vertical; }
+.medical-id-fields input::placeholder, .medical-id-fields textarea::placeholder { color: #718198; }
+.medical-id-actions { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
+.medical-id-status { min-height: 0; margin: 7px 0 0; color: #84dec9; font-size: 8px; }
+.medical-id-status:empty { display: none; }
+.medical-id-status.is-error { color: #ffb6b6; }
+
+@media (max-width: 520px) {
+  .aid-guide-grid { grid-template-columns: 1fr; }
+  .aid-guide summary { grid-template-columns: 88px 1fr 18px; }
+  .aid-guide summary img { width: 88px; height: 58px; }
+  .medical-id-fields { grid-template-columns: 1fr; }
+  .medical-id-fields .medical-id-wide { grid-column: auto; }
+}
+
+/* The prototype defaults to dark mode; this palette is applied by the theme toggle. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ink: #14283d;
+  --muted: #738399;
+  --line: #e8edf2;
+  --navy: #102a43;
+  --paper: #f5f8fa;
+}
+
+:root[data-theme="light"] body {
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 85% 4%, rgba(216, 241, 238, .62), transparent 28rem),
+    var(--paper);
+}
+
+:root[data-theme="light"] body::before { display: none; }
+:root[data-theme="light"] .topbar {
+  border-color: rgba(222,231,236,.8);
+  background: rgba(255,255,255,.88);
+}
+:root[data-theme="light"] .brand,
+:root[data-theme="light"] h1,
+:root[data-theme="light"] .card-topline h2,
+:root[data-theme="light"] .map-heading h2,
+:root[data-theme="light"] .queue-heading h2,
+:root[data-theme="light"] .first-aid-heading h2,
+:root[data-theme="light"] .nairobi-directory-heading h2 { color: var(--navy); }
+:root[data-theme="light"] .brand-mark { background: #193d59; box-shadow: none; }
+:root[data-theme="light"] .brand-period { color: #51afaa; }
+:root[data-theme="light"] .heading-accent { color: #428b91; }
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .section-kicker { color: #698094; }
+:root[data-theme="light"] .intro,
+:root[data-theme="light"] .card-copy { color: #6a7c8e; }
+:root[data-theme="light"] .environment-pill { border-color: #cce4df; color: #34736d; background: #f3fbf9; }
+:root[data-theme="light"] .icon-button { border-color: var(--line); color: #53687a; background: #fff; }
+:root[data-theme="light"] .sos-card,
+:root[data-theme="light"] .map-card,
+:root[data-theme="light"] .queue-card,
+:root[data-theme="light"] .first-aid-card,
+:root[data-theme="light"] .nairobi-directory,
+:root[data-theme="light"] .medical-id-card {
+  border-color: rgba(222,231,236,.9);
+  background: #fff;
+  box-shadow: 0 14px 42px rgba(27,57,79,.055);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root[data-theme="light"] .first-aid-card { border-color: #dceae6; }
+:root[data-theme="light"] .shield-icon,
+:root[data-theme="light"] .first-aid-cross { color: #438d81; background: #e8f5f1; }
+:root[data-theme="light"] .location-status,
+:root[data-theme="light"] .button-crash,
+:root[data-theme="light"] .button-secondary {
+  border-color: #e3eaf0;
+  color: #425f74;
+  background: #fff;
+}
+:root[data-theme="light"] .location-status { color: #596e80; background: #fafcfd; }
+:root[data-theme="light"] .accuracy { color: #8494a2; }
+:root[data-theme="light"] .location-actions .text-button,
+:root[data-theme="light"] .text-button { color: #347d83; }
+:root[data-theme="light"] .button-secondary:hover:not(:disabled),
+:root[data-theme="light"] .button-map:hover:not(:disabled) { background: #f1f7f8; }
+:root[data-theme="light"] .button-sos { color: #fff; background: var(--navy); box-shadow: none; }
+:root[data-theme="light"] .button-sos:hover:not(:disabled) { background: #1b4562; }
+:root[data-theme="light"] .button-crash { color: var(--ink); }
+:root[data-theme="light"] .button-crash:hover:not(:disabled) { background: #f7fafb; }
+:root[data-theme="light"] .button-crash small { color: #8a9aa7; }
+:root[data-theme="light"] .crash-icon { color: #417d87; background: #e5f3f2; }
+:root[data-theme="light"] .text-button:hover { color: #1c5d64; }
+:root[data-theme="light"] .kenya-emergency { border-color: #f0dfc7; background: #fffaf1; }
+:root[data-theme="light"] .kenya-emergency-copy strong { color: #71483d; }
+:root[data-theme="light"] .kenya-contact-group > strong { color: #76594d; }
+:root[data-theme="light"] .kenya-emergency-copy div span,
+:root[data-theme="light"] .kenya-emergency-swahili { color: #947a6b; }
+:root[data-theme="light"] .kenya-emergency-actions a,
+:root[data-theme="light"] .kenya-contact-extra a {
+  border-color: #edd8bd;
+  color: #885443;
+  background: #fff;
+}
+:root[data-theme="light"] .kenya-emergency-actions a:hover { background: #fff3e4; }
+:root[data-theme="light"] .kenya-contact-extra a { border-color: transparent; color: #987052; background: transparent; }
+:root[data-theme="light"] .aid-subheading { color: #355468; }
+:root[data-theme="light"] .drabc-list li,
+:root[data-theme="light"] .aid-guide,
+:root[data-theme="light"] .nairobi-hospital,
+:root[data-theme="light"] .facility-row {
+  border-color: #e8eeee;
+  background: #fcfdfd;
+}
+:root[data-theme="light"] .drabc-letter,
+:root[data-theme="light"] .aid-guide summary img,
+:root[data-theme="light"] .hospital-symbol { color: #43877f; background: #eaf5f2; }
+:root[data-theme="light"] .drabc-list li > div > strong { color: #354f60; }
+:root[data-theme="light"] .aid-guide summary strong,
+:root[data-theme="light"] .nairobi-hospital-title h3,
+:root[data-theme="light"] .facility-name { color: #304a5c; }
+:root[data-theme="light"] .drabc-list li p,
+:root[data-theme="light"] .aid-guide-intro,
+:root[data-theme="light"] .aid-guide summary small,
+:root[data-theme="light"] .aid-guide-body ol,
+:root[data-theme="light"] .aid-guide-body p,
+:root[data-theme="light"] .first-aid-steps p { color: #617485; }
+:root[data-theme="light"] .swahili-copy,
+:root[data-theme="light"] .aid-guide-body .swahili-copy { color: #56857d; }
+:root[data-theme="light"] .aid-guide-body { border-color: #edf2f1; }
+:root[data-theme="light"] .aid-guide-body .aid-caution { color: #846b4a; background: #faf5ea; }
+:root[data-theme="light"] .aid-emergency-reminder { color: #79564e; background: #fff5f0; }
+:root[data-theme="light"] .first-aid-disclaimer,
+:root[data-theme="light"] .directory-notice { border-color: #edf2f1; color: #8a9a9e; }
+:root[data-theme="light"] .aid-filter { border-color: #dce5e9; color: #526b7b; background: #fff; }
+:root[data-theme="light"] .aid-filter:hover,
+:root[data-theme="light"] .aid-filter.is-active { border-color: #a8d7ce; color: #286f65; background: #eaf7f3; }
+:root[data-theme="light"] .aid-expand { color: #58928a; }
+:root[data-theme="light"] .aid-guide summary img { background: #f2f6f7; }
+:root[data-theme="light"] .map-heading h2,
+:root[data-theme="light"] .queue-heading h2,
+:root[data-theme="light"] .facility-heading h3 { color: #233d52; }
+:root[data-theme="light"] .button-map {
+  border-color: #dfe9ed;
+  color: #376d76;
+  background: #fff;
+}
+:root[data-theme="light"] .map-wrap { background: #e8f0ed; }
+:root[data-theme="light"] .map-wrap .leaflet-tile { filter: none; }
+:root[data-theme="light"] .map-legend { border-color: rgba(221,230,232,.9); color: #536877; background: rgba(255,255,255,.92); }
+:root[data-theme="light"] .facility-section { border-color: #eef2f4; }
+:root[data-theme="light"] .facility-heading h3 { color: #233d52; }
+:root[data-theme="light"] .facility-heading p,
+:root[data-theme="light"] .facility-meta,
+:root[data-theme="light"] .nairobi-hospital-title p,
+:root[data-theme="light"] .empty-facilities { color: #84929d; }
+:root[data-theme="light"] .facility-distance,
+:root[data-theme="light"] .result-count { color: #4d8b82; }
+:root[data-theme="light"] .facility-meta a { color: #4b8390; }
+:root[data-theme="light"] .facility-disclaimer { color: #9b8160; }
+:root[data-theme="light"] .directory-count,
+:root[data-theme="light"] .queue-count { color: #597f79; background: #edf6f3; }
+:root[data-theme="light"] .hospital-actions a { border-color: #dfeae7; color: #42766f; background: #fff; }
+:root[data-theme="light"] .hospital-actions a:hover { background: #f0f8f6; }
+:root[data-theme="light"] .hospital-actions a.directions-link { color: #65838e; background: transparent; }
+:root[data-theme="light"] .queue-empty { border-color: #e4ebee; }
+:root[data-theme="light"] .queue-empty strong { color: #476475; }
+:root[data-theme="light"] .incident-title { color: #284255; }
+:root[data-theme="light"] .queue-empty p,
+:root[data-theme="light"] .incident-time,
+:root[data-theme="light"] .queue-footnote { color: #8a99a5; }
+:root[data-theme="light"] .incident-row { border-color: #e9eef1; background: #fff; }
+:root[data-theme="light"] .incident-action { border-color: #e2e9ed; color: #49727d; background: #fff; }
+:root[data-theme="light"] .incident-action:hover { background: #f2f8f7; }
+:root[data-theme="light"] .status-active { color: #a36a32; background: #fff3df; }
+:root[data-theme="light"] .status-acknowledged { color: #357c79; background: #e5f4f1; }
+:root[data-theme="light"] .status-resolved,
+:root[data-theme="light"] .status-cancelled { color: #6d7f8b; background: #eef2f4; }
+:root[data-theme="light"] .safety-note p,
+:root[data-theme="light"] .provider-note p { color: #78889a; }
+:root[data-theme="light"] .countdown-panel { border-color: #f1d8ce; background: #fff8f4; }
+:root[data-theme="light"] .countdown-panel strong { color: #804638; }
+:root[data-theme="light"] .countdown-panel p { color: #9c766a; }
+:root[data-theme="light"] .countdown-ring { color: #a14c39; }
+:root[data-theme="light"] .button-cancel { border-color: #edcabc; color: #9a4f3d; background: #fff; }
+:root[data-theme="light"] .inline-message { color: #4d817a; }
+:root[data-theme="light"] .map-overlay { color: #637c88; background: rgba(239,246,244,.91); }
+:root[data-theme="light"] .map-overlay strong { color: #486274; }
+:root[data-theme="light"] .map-overlay > span:last-child { color: #83949d; }
+:root[data-theme="light"] .empty-facilities { border-color: #e2e9ec; }
+:root[data-theme="light"] .toast { border-color: #d7e8e2; color: #41675f; background: #f5fcf9; }
+:root[data-theme="light"] .toast.is-error { border-color: #f1d7d2; color: #96584f; background: #fff8f6; }
+:root[data-theme="light"] .medical-id-card { border-color: rgba(222,231,236,.9); background: #fff; }
+:root[data-theme="light"] .medical-id-content { border-color: #edf2f1; }
+:root[data-theme="light"] .medical-id-mark { color: #695da8; background: #f0edfa; }
+:root[data-theme="light"] .medical-id-heading strong { color: #304a5c; }
+:root[data-theme="light"] .medical-id-heading small { color: #728392; }
+:root[data-theme="light"] .medical-id-notice { color: #846b4a; }
+:root[data-theme="light"] .medical-id-fields label { color: #526879; }
+:root[data-theme="light"] .medical-id-fields input,
+:root[data-theme="light"] .medical-id-fields textarea {
+  border-color: #dce5e9;
+  color: #14283d;
+  background: #fff;
+}
+:root[data-theme="light"] .medical-id-fields input:focus,
+:root[data-theme="light"] .medical-id-fields textarea:focus { border-color: #62b9a4; }
+:root[data-theme="light"] .medical-id-fields input::placeholder,
+:root[data-theme="light"] .medical-id-fields textarea::placeholder { color: #84929d; }
+:root[data-theme="light"] .medical-id-status { color: #347d70; }
+:root[data-theme="light"] .medical-id-status.is-error { color: #a14545; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+  border: 0;
+}
+
+.text-size-button { width: 42px; font-size: 11px; font-weight: 700; }
+
+.facility-results-controls,
+.queue-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.facility-type-filter {
+  max-width: 130px;
+  padding: 7px 8px;
+  border: 1px solid rgba(195, 211, 235, .17);
+  border-radius: 7px;
+  color: #d1def0;
+  background: #101a2b;
+  font: inherit;
+  font-size: 9px;
+}
+
+.facility-type-filter:disabled { opacity: .55; }
+.facility-type-filter:focus-visible { outline: 3px solid #6faec5; outline-offset: 3px; }
+
+.connection-notice {
+  position: fixed;
+  z-index: 1100;
+  top: 82px;
+  left: 50%;
+  width: min(680px, calc(100% - 28px));
+  padding: 11px 14px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(244, 194, 123, .34);
+  border-radius: 10px;
+  color: #ffe0ad;
+  background: rgba(67, 45, 28, .96);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .24);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.connection-notice[hidden] { display: none; }
+
+:root[data-theme="light"] .facility-type-filter {
+  border-color: #dfe9ed;
+  color: #376d76;
+  background: #fff;
+}
+
+:root[data-theme="light"] .connection-notice {
+  border-color: #e8c995;
+  color: #64451e;
+  background: #fff6e8;
+}
+
+:root[data-text-size="large"] body { zoom: 1.15; }
+
+@media (max-width: 520px) {
+  .topbar-right { gap: 6px; }
+  .environment-pill { letter-spacing: .5px; }
+  .queue-heading { align-items: flex-start; gap: 8px; }
+  .queue-heading-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .facility-heading { align-items: flex-start; gap: 8px; }
+  .facility-results-controls { flex-direction: column; align-items: flex-end; }
+  .facility-type-filter { max-width: 112px; }
+  .connection-notice { top: 70px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+.patient-sharing-consent {
+  margin: 0 0 14px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  align-items: start;
+  gap: 8px;
+  border: 1px solid rgba(241, 161, 130, .25);
+  border-radius: 9px;
+  color: #f0cbb8;
+  background: rgba(111, 58, 42, .16);
+  cursor: pointer;
+}
+
+.patient-sharing-consent input { margin: 2px 0 0; accent-color: #57cbb1; }
+.patient-sharing-consent span { display: grid; gap: 4px; }
+.patient-sharing-consent strong { font-size: 9px; line-height: 1.4; }
+.patient-sharing-consent small { color: #c3ad99; font-size: 8px; line-height: 1.5; }
+
+.medic-portal {
+  overflow: hidden;
+  border: 1px solid rgba(199, 215, 241, .14);
+  border-radius: 15px;
+  background: rgba(15, 23, 42, .69);
+}
+
+.medic-portal > details > summary {
+  padding: 13px 15px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.medic-portal > details > summary::-webkit-details-marker { display: none; }
+.medic-portal > details > summary:focus-visible { outline: 3px solid #6faec5; outline-offset: -3px; }
+.medic-portal-content { padding: 0 15px 15px; border-top: 1px solid rgba(195,211,235,.1); }
+.medic-privacy-notice { margin: 11px 0; color: #d3bc94; font-size: 9px; line-height: 1.55; }
+.medic-status { min-height: 1.2em; margin: 8px 0; color: #84dec9; font-size: 9px; line-height: 1.5; }
+.medic-status.is-error { color: #ffb6b6; }
+.medic-sign-in { display: grid; gap: 9px; }
+.medic-sign-in[hidden], #medicSession[hidden], #dispatchAssignmentPanel[hidden] { display: none; }
+.medic-sign-in label, .dispatch-assignment label { display: grid; gap: 4px; color: #bac7d9; font-size: 9px; }
+.medic-sign-in input, .dispatch-assignment input, .dispatch-assignment select {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid rgba(195,211,235,.16);
+  border-radius: 7px;
+  color: #e8edf7;
+  background: rgba(255,255,255,.045);
+  font: inherit;
+  font-size: 10px;
+}
+.medic-sign-in .button { justify-self: start; padding: 9px 13px; }
+.medic-session-header, .medic-list-header, .medic-incident-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+}
+.medic-session-header { padding: 8px 0; color: #bac7d9; font-size: 9px; }
+.medic-list-header h3, .dispatch-assignment h3 { margin: 8px 0; color: #e2eaf5; font: 700 11px Manrope, sans-serif; }
+.medic-incident-list { display: grid; gap: 8px; }
+.medic-incident-card { padding: 10px; border: 1px solid rgba(195,211,235,.12); border-radius: 9px; background: rgba(255,255,255,.035); }
+.medic-incident-heading strong { color: #e2eaf5; font-size: 10px; }
+.medic-incident-card > p { margin: 7px 0; color: #9baac0; font-size: 8px; }
+.medic-incident-card > a { color: #8bdccc; font-size: 9px; text-decoration: none; }
+.medic-incident-card > a:hover { text-decoration: underline; }
+.medic-incident-card dl { margin: 9px 0; display: grid; gap: 6px; }
+.medic-incident-card dl > div { display: grid; grid-template-columns: minmax(88px, .4fr) 1fr; gap: 8px; }
+.medic-incident-card dt { color: #9baac0; font-size: 8px; }
+.medic-incident-card dd { margin: 0; color: #e2eaf5; font-size: 9px; overflow-wrap: anywhere; }
+.medic-incident-card > p:only-child { margin-bottom: 0; }
+.medic-incident-card .incident-action { color: #ffd1bc; }
+.dispatch-assignment { margin-top: 14px; padding-top: 11px; display: grid; gap: 7px; border-top: 1px solid rgba(195,211,235,.1); }
+.dispatch-assignment button { justify-self: start; padding: 8px 10px; }
+
+:root[data-theme="light"] .patient-sharing-consent {
+  border-color: #f1d8ce;
+  color: #804638;
+  background: #fff8f4;
+}
+:root[data-theme="light"] .patient-sharing-consent small { color: #846b4a; }
+:root[data-theme="light"] .medic-portal { border-color: rgba(222,231,236,.9); background: #fff; }
+:root[data-theme="light"] .medic-portal-content { border-color: #edf2f1; }
+:root[data-theme="light"] .medic-privacy-notice { color: #846b4a; }
+:root[data-theme="light"] .medic-status { color: #347d70; }
+:root[data-theme="light"] .medic-status.is-error { color: #a14545; }
+:root[data-theme="light"] .medic-sign-in label,
+:root[data-theme="light"] .dispatch-assignment label { color: #526879; }
+:root[data-theme="light"] .medic-sign-in input,
+:root[data-theme="light"] .dispatch-assignment input,
+:root[data-theme="light"] .dispatch-assignment select { border-color: #dce5e9; color: #14283d; background: #fff; }
+:root[data-theme="light"] .medic-session-header { color: #526879; }
+:root[data-theme="light"] .medic-list-header h3,
+:root[data-theme="light"] .dispatch-assignment h3 { color: #304a5c; }
+:root[data-theme="light"] .medic-incident-card { border-color: #e8eeee; background: #fcfdfd; }
+:root[data-theme="light"] .medic-incident-heading strong,
+:root[data-theme="light"] .medic-incident-card dd { color: #304a5c; }
+:root[data-theme="light"] .medic-incident-card > p,
+:root[data-theme="light"] .medic-incident-card dt { color: #84929d; }
+:root[data-theme="light"] .medic-incident-card > a { color: #347d83; }
+:root[data-theme="light"] .dispatch-assignment { border-color: #edf2f1; }
