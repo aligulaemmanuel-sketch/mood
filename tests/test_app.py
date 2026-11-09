@@ -264,6 +264,23 @@ class EmergencyAppTests(unittest.TestCase):
         self.assertNotIn("Synthetic Patient", created.text)
         self.assertNotIn("patient_details", self.client.get("/api/incidents").json()[0])
 
+    def test_patient_details_can_be_disabled_for_ephemeral_deployments(self):
+        with patch.dict(os.environ, {"PATIENT_DETAILS_ENABLED": "false"}):
+            health = self.client.get("/api/health")
+            rejected = self.create_incident(
+                request_key="test-key-no-patient-details",
+                share_patient_details=True,
+                patient_details={"name": "Synthetic Patient"},
+            )
+
+        self.assertFalse(health.json()["patient_details"]["enabled"])
+        self.assertEqual(rejected.status_code, 403)
+        with emergency_app._connect() as connection:
+            count = connection.execute(
+                "SELECT COUNT(*) FROM incident_patient_details"
+            ).fetchone()[0]
+        self.assertEqual(count, 0)
+
     def test_only_assigned_medic_can_view_consented_details_and_close_deletes_them(self):
         incident_id = self.create_incident(
             request_key="test-key-assigned",

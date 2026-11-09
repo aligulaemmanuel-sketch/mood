@@ -1,6 +1,6 @@
 # Beacon Kenya Emergency Support
 
-A Kenya-focused support app with device GPS, OpenStreetMap maps and nearby health-facility lookup. SOS and crash buttons create simulation records only; there is no real dispatch integration. When configured, Firebase Realtime Database is authoritative for incident metadata; SQLite retains locally stored, explicitly consented medic details.
+A Kenya-focused support app with device GPS, OpenStreetMap maps and nearby health-facility lookup. SOS and crash buttons create simulation records only; there is no real dispatch integration. When configured, Firebase Realtime Database is authoritative for incident metadata. Local development can store explicitly consented medic details in SQLite; the free Render deployment disables server-side patient-detail sharing because its filesystem is temporary.
 
 **App alerts do not contact emergency contacts, hospitals, police, EMS, or public emergency services.** Emergency contacts are displayed as tap-to-call links only. Official UK government travel guidance lists **999** for ambulance, fire and police: [Getting help in Kenya](https://www.gov.uk/foreign-travel-advice/kenya/getting-help). The displayed **112** and the Kenya Red Cross E-Plus / St John Ambulance numbers were provided for this prototype; verify all numbers and availability with the relevant Kenyan service before relying on them. No number is dialled by an SOS or crash simulation.
 
@@ -31,7 +31,7 @@ The SQLite database is created at `data/incidents.sqlite3`. Set `EMERGENCY_DB_PA
 ## Deploy to Render with Firebase
 
 1. Push this project to a GitHub repository. Do not commit `.env`, a service-account JSON file, or private credentials.
-2. In Render, choose **New → Blueprint**, connect the repository, and deploy using [render.yaml](./render.yaml). The Blueprint creates a Python web service and a 1 GB persistent disk for the SQLite patient-details portion of the medic portal. Persistent disks require a paid Render service plan.
+2. In Render, choose **New → Blueprint**, connect the repository, and deploy using [render.yaml](./render.yaml). The Blueprint creates a free Python web service and does not attach a persistent disk. Render's free filesystem is temporary, so Firebase must be configured for incident records to survive restarts. The free service may sleep when idle.
 3. In the Render service's **Environment** settings, add the Firebase values requested by the Blueprint:
    - `FIREBASE_PROJECT_ID`: Firebase project ID.
    - `FIREBASE_DATABASE_URL`: exact Realtime Database URL shown in Firebase Console.
@@ -40,7 +40,7 @@ The SQLite database is created at `data/incidents.sqlite3`. Set `EMERGENCY_DB_PA
 4. In Firebase Console, apply [database.rules.json](./database.rules.json). The server uses Firebase Admin credentials; the Admin SDK bypasses Realtime Database rules. Never expose the service-account JSON to the browser or commit it.
 5. Redeploy/restart after changing environment variables. Check `https://<your-render-service>.onrender.com/api/health`; `database.primary` should be `firebase_realtime_database`, and `firebase.database.ready` should be `true`.
 
-The Realtime Database is the source of truth for incident records, status, and assignments when configured. If Firebase is configured but unreachable, incident API requests fail rather than silently falling back to SQLite. SQLite remains necessary for explicitly shared patient medical details used by the medic portal and is stored on the Render disk. A Render disk is persistent but not encrypted by this app; use synthetic data only until a professional security/privacy review. Do not use this prototype as a real emergency dispatch service.
+The Realtime Database is the source of truth for incident records, status, and assignments when configured. If Firebase is configured but unreachable, incident API requests fail rather than silently falling back to SQLite. On Render's free plan, SQLite is temporary and patient-detail sharing is disabled; do not rely on it for durable records. Local development can still exercise the medic-details workflow using synthetic data. Do not use this prototype as a real emergency dispatch service.
 
 ## Prototype behavior
 

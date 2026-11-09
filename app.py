@@ -34,6 +34,16 @@ OVERPASS_USER_AGENT = "EmergencyAlertPrototype/1.0 (local safety demo)"
 FACILITY_CACHE_SECONDS = 60
 FACILITY_CACHE: dict[tuple[float, float, int], tuple[datetime, list[dict]]] = {}
 
+
+def _patient_details_enabled() -> bool:
+    return os.environ.get("PATIENT_DETAILS_ENABLED", "true").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     _initialize_database()
@@ -610,6 +620,7 @@ def health() -> dict:
             "project_id": os.environ.get("FIREBASE_PROJECT_ID", ""),
             "database": {**firebase_database, "ready": firebase_database_ready},
         },
+        "patient_details": {"enabled": _patient_details_enabled()},
     }
 
 
@@ -631,6 +642,12 @@ def list_incidents(limit: int = Query(default=50, ge=1, le=100)) -> list[dict]:
 
 @app.post("/api/incidents", status_code=201)
 def create_incident(payload: IncidentCreate) -> dict:
+    if payload.patient_details is not None and not _patient_details_enabled():
+        raise HTTPException(
+            status_code=403,
+            detail="Patient medical-detail sharing is disabled on this deployment.",
+        )
+
     captured_at = payload.location_captured_at
     if captured_at.tzinfo is None:
         captured_at = captured_at.replace(tzinfo=timezone.utc)

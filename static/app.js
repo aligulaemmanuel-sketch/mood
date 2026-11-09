@@ -927,6 +927,10 @@
       const dbReady = health.database?.ready !== false;
       const firebaseAuthEnabled = Boolean(health.firebase?.enabled);
       const firebaseDatabaseEnabled = Boolean(health.firebase?.database?.enabled);
+      const patientDetailsEnabled = health.patient_details?.enabled !== false;
+      $("sharePatientDetails").closest(".patient-sharing-consent").hidden = !patientDetailsEnabled;
+      $("patientDetailsUnavailable").hidden = patientDetailsEnabled;
+      if (!patientDetailsEnabled) $("sharePatientDetails").checked = false;
       state.backendAvailable = dbReady;
 
       if (status) {
