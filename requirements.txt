@@ -1,0 +1,6 @@
+fastapi>=0.110,<1
+firebase-admin>=6.5,<8
+google-auth>=2.35,<3
+python-dotenv>=1,<2
+pydantic>=2,<3
+uvicorn[standard]>=0.29,<1

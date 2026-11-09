@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: first-aid-emergency-respond
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    disk:
+      name: first-aid-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: EMERGENCY_DB_PATH
+        value: /var/data/incidents.sqlite3
+      - key: FIREBASE_DATABASE_URL
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: FIREBASE_WEB_API_KEY
+        sync: false
+      - key: FIREBASE_WEB_AUTH_DOMAIN
+        sync: false
+      - key: FIREBASE_WEB_APP_ID
+        sync: false
